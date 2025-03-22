@@ -1,0 +1,13 @@
+package com.coderdojo.zen;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class ZenModulithApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
