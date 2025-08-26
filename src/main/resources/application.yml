@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: zen-modulith
+  datasource:
+    url: jdbc:postgresql://localhost:5432/zen
+    username: admin
+    password: secret_password
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always
