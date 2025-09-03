@@ -4,16 +4,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Javadoc
+ * Javadoc.
  */
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class InternalServerErrorException extends RuntimeException {
-    /**
-     * Javadoc
-     *
-     * @param message Example
-     */
-    public InternalServerErrorException(String message) {
-        super(message);
-    }
+
+  /**
+   * Javadoc.
+   *
+   * @param message Example
+   */
+  public InternalServerErrorException(String message) {
+    super(message);
+  }
 }

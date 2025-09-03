@@ -9,45 +9,46 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 /**
- * Javadoc
+ * Javadoc.
  */
 @TestConfiguration(proxyBeanMethods = false)
 class ApplicationTest {
 
-    /**
-     * Sole constructor. (For invocation by subclass
-     * constructors, typically implicit.)
-     */
-    ApplicationTest() { /* Default Constructor */ }
+  /**
+   * Sole constructor. (For invocation by subclass
+   * constructors, typically implicit.).
+   */
+  ApplicationTest() { /* Default Constructor */
+  }
 
-    /**
-     * Javadoc
-     *
-     * @return Example
-     */
-    @Bean
-    @ServiceConnection
-    PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
-    }
+  /**
+   * Javadoc.
+   *
+   * @param args Example
+   */
+  public static void main(String[] args) {
+    SpringApplication.from(Application::main).with(ApplicationTest.class).run(args);
+  }
 
-    /**
-     * Javadoc
-     *
-     * @param args Example
-     */
-    public static void main(String[] args) {
-        SpringApplication.from(Application::main).with(ApplicationTest.class).run(args);
-    }
+  /**
+   * Javadoc.
+   *
+   * @return Example
+   */
+  @Bean
+  @ServiceConnection
+  PostgreSQLContainer<?> postgresContainer() {
+    return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"));
+  }
 
-    /**
-     * Javadoc
-     *
-     * @throws Exception Example
-     */
-    @Test
-    void contextLoads() throws Exception {
-
-    }
+  /**
+   * Javadoc.
+   *
+   * @throws Exception Example
+   */
+  @Test
+  void contextLoads() throws Exception {
+    /* Context Loads */
+  }
 
 }
