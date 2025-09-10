@@ -1,5 +1,13 @@
 # Zen Modulith
 
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=bugs)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=coverage)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=codeclubkinsale_zen-modulith&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=codeclubkinsale_zen-modulith)
+
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
