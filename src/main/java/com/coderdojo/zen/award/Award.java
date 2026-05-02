@@ -1,4 +1,4 @@
-package com.coderdojo.zen.badge;
+package com.coderdojo.zen.award;
 
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -13,7 +13,7 @@ import org.springframework.data.annotation.Version;
  * @param image       Example
  * @param version     Example
  */
-record Badge(
+record Award(
     @Id
     Integer id,
     @NotEmpty

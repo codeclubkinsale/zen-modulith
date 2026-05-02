@@ -1,5 +1,9 @@
 package com.coderdojo.zen.belt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +16,6 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Javadoc.
@@ -46,7 +46,7 @@ class BeltRepositoryTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   BeltRepositoryTest() { /* Default Constructor */
   }
@@ -56,7 +56,7 @@ class BeltRepositoryTest {
    */
   @BeforeEach
   void setUp() {
-    List<Belt> belts = List.of(new Belt(1, "Test Title", "Test Body", "Test Body", null));
+    List<Belt> belts = List.of(new Belt(9, "Test Title", "Test Body", "Test Body", null));
     beltRepository.saveAll(belts);
   }
 

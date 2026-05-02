@@ -1,4 +1,4 @@
-package com.coderdojo.zen.dojo;
+package com.coderdojo.zen.award;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,16 +11,16 @@ import org.springframework.boot.test.json.JacksonTester;
  * Javadoc.
  */
 @JsonTest
-class DojoJsonTest {
+class AwardJsonTest {
 
   @Autowired
-  private JacksonTester<Dojo> jacksonTester;
+  private JacksonTester<Award> jacksonTester;
 
   /**
    * Sole constructor. (For invocation by subclass
    * constructors, typically implicit.)
    */
-  DojoJsonTest() { /* Default Constructor */
+  AwardJsonTest() { /* Default Constructor */
   }
 
   /**
@@ -29,12 +29,12 @@ class DojoJsonTest {
    * @throws Exception Example
    */
   @Test
-  void shouldSerializeDojo() throws Exception {
-    Dojo dojo = new Dojo(1, "Name", "Description", "Image", null);
+  void shouldSerializeAward() throws Exception {
+    Award award = new Award(1, "Name", "Description", "Image", null);
     String expected = """
         {"id":1,"name":"Name","description":"Description","image":"Image","version":null}
         """;
-    assertThat(jacksonTester.write(dojo)).isEqualToJson(expected);
+    assertThat(jacksonTester.write(award)).isEqualToJson(expected);
   }
 
   /**
@@ -43,16 +43,16 @@ class DojoJsonTest {
    * @throws Exception Example
    */
   @Test
-  void shouldDeserializeDojo() throws Exception {
-    Dojo dojo = new Dojo(1, "Name", "Description", "Image", null);
+  void shouldDeserializeAward() throws Exception {
+    Award award = new Award(1, "Name", "Description", "Image", null);
     String content = """
         {"id":1,"name":"Name","description":"Description","image":"Image","version":null}
         """;
 
-    assertThat(jacksonTester.parseObject(content).id()).isEqualTo(dojo.id());
-    assertThat(jacksonTester.parseObject(content).name()).isEqualTo(dojo.name());
-    assertThat(jacksonTester.parseObject(content).description()).isEqualTo(dojo.description());
-    assertThat(jacksonTester.parseObject(content).image()).isEqualTo(dojo.image());
+    assertThat(jacksonTester.parseObject(content).id()).isEqualTo(award.id());
+    assertThat(jacksonTester.parseObject(content).name()).isEqualTo(award.name());
+    assertThat(jacksonTester.parseObject(content).description()).isEqualTo(award.description());
+    assertThat(jacksonTester.parseObject(content).image()).isEqualTo(award.image());
   }
 
 }

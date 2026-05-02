@@ -1,20 +1,5 @@
 package com.coderdojo.zen.badge;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -27,6 +12,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 /**
  * Javadoc.
@@ -46,12 +46,10 @@ class BadgeControllerTest {
    */
   @MockitoBean
   BadgeRepository repository;
-
   /**
    * Javadoc.
    */
   List<Badge> badges = new ArrayList<>();
-
   /**
    * Javadoc.
    */
@@ -60,7 +58,7 @@ class BadgeControllerTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   BadgeControllerTest() { /* Default Constructor */
   }
@@ -104,7 +102,7 @@ class BadgeControllerTest {
 
     when(repository.findAll()).thenReturn(badges);
 
-    ResultActions resultActions = mockMvc.perform(get("/api/badges"))
+    ResultActions resultActions = mockMvc.perform(get("/badges"))
         .andExpect(status().isOk())
         .andExpect(content().json(jsonResponse));
 
@@ -124,7 +122,7 @@ class BadgeControllerTest {
     when(repository.findById(1)).thenReturn(Optional.of(badge));
 
 
-    mockMvc.perform(get("/api/badges/1"))
+    mockMvc.perform(get("/badges/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name",
             is(badge.name())))
@@ -140,11 +138,11 @@ class BadgeControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldCreateNewBadgeWhenGivenValidID() throws Exception {
+  void shouldCreateNewBadgeWhenGivenValidId() throws Exception {
     Badge badge = new Badge(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(badge)).thenReturn(badge);
 
-    mockMvc.perform(post("/api/badges")
+    mockMvc.perform(post("/badges")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(badge)))
         .andExpect(status().isCreated())
@@ -163,13 +161,12 @@ class BadgeControllerTest {
    */
   @Test
   void shouldUpdateBadgeWhenGivenValidBadge() throws Exception {
-    Badge updated = new Badge(1, "Test Title", "Test Body", "Test Body",
-        null);
+    Badge updated = new Badge(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.findById(1)).thenReturn(Optional.of(badges.getFirst()));
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/badges/1")
+    mockMvc.perform(put("/badges/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isOk());
@@ -181,12 +178,12 @@ class BadgeControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidBadgeID() throws Exception {
+  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidBadgeId() throws Exception {
     Badge updated = new Badge(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/badges/999")
+    mockMvc.perform(put("/badges/999")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isNotFound());
@@ -198,10 +195,10 @@ class BadgeControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldDeleteBadgeWhenGivenValidID() throws Exception {
+  void shouldDeleteBadgeWhenGivenValidId() throws Exception {
     doNothing().when(repository).deleteById(1);
 
-    mockMvc.perform(delete("/api/badges/1"))
+    mockMvc.perform(delete("/badges/1"))
         .andExpect(status().isNoContent());
 
     verify(repository, times(1)).deleteById(1);

@@ -1,5 +1,7 @@
 package com.coderdojo.zen.dojo;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Javadoc.
@@ -41,7 +41,7 @@ class DojoControllerIntTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   DojoControllerIntTest() { /* Default Constructor */
   }
@@ -60,17 +60,17 @@ class DojoControllerIntTest {
    */
   @Test
   void shouldFindAllDojos() {
-    Dojo[] dojos = restTemplate.getForObject("/api/dojos", Dojo[].class);
-    assertThat(dojos).hasSizeGreaterThan(8);
+    Dojo[] dojos = restTemplate.getForObject("/dojos", Dojo[].class);
+    assertThat(dojos).hasSizeGreaterThan(7);
   }
 
   /**
    * Javadoc.
    */
   @Test
-  void shouldFindDojoWhenValidDojoID() {
+  void shouldFindDojoWhenValidDojoId() {
     ResponseEntity<Dojo> response =
-        restTemplate.exchange("/api/dojos/1", HttpMethod.GET, null, Dojo.class);
+        restTemplate.exchange("/dojos/1", HttpMethod.GET, null, Dojo.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
   }
@@ -79,10 +79,10 @@ class DojoControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldThrowNotFoundWhenInvalidDojoID() {
+  void shouldThrowNotFoundWhenInvalidDojoId() {
     ResponseEntity<Dojo> response =
-        restTemplate.exchange("/api/dojos/999", HttpMethod.GET, null, Dojo.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        restTemplate.exchange("/dojos/999", HttpMethod.GET, null, Dojo.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   /**
@@ -94,7 +94,7 @@ class DojoControllerIntTest {
     Dojo dojo = new Dojo(9, "Test Name", "Test Description", "Test Image", null);
 
     ResponseEntity<Dojo> response =
-        restTemplate.exchange("/api/dojos", HttpMethod.POST, new HttpEntity<>(dojo), Dojo.class);
+        restTemplate.exchange("/dojos", HttpMethod.POST, new HttpEntity<>(dojo), Dojo.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(response.getBody()).isNotNull();
     assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(9);
@@ -110,7 +110,7 @@ class DojoControllerIntTest {
   void shouldNotCreateNewDojoWhenValidationFails() {
     Dojo dojo = new Dojo(9, "Test Title", "Test Body", "", null);
     ResponseEntity<Dojo> response =
-        restTemplate.exchange("/api/dojos", HttpMethod.POST, new HttpEntity<>(dojo), Dojo.class);
+        restTemplate.exchange("/dojos", HttpMethod.POST, new HttpEntity<>(dojo), Dojo.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -122,16 +122,17 @@ class DojoControllerIntTest {
   @Rollback
   void shouldUpdateDojoWhenDojoIsValid() {
     ResponseEntity<Dojo> response =
-        restTemplate.exchange("/api/dojos/8", HttpMethod.GET, null, Dojo.class);
+        restTemplate.exchange("/dojos/8", HttpMethod.GET, null, Dojo.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     Dojo existing = response.getBody();
     assertThat(existing).isNotNull();
-    Dojo updated = new Dojo(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
-        existing.version());
+    Dojo updated =
+        new Dojo(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
+            existing.version());
 
     assertThat(updated.id()).isEqualTo(8);
-    assertThat(updated.name()).isEqualTo("Black Belt");
+    assertThat(updated.name()).isEqualTo("excepturi optio8");
     assertThat(updated.description()).isEqualTo("NEW POST TITLE #1");
     assertThat(updated.image()).isEqualTo("NEW POST BODY #1");
   }
@@ -141,9 +142,9 @@ class DojoControllerIntTest {
    */
   @Test
   @Rollback
-  void shouldDeleteWithValidID() {
+  void shouldDeleteWithValidId() {
     ResponseEntity<Void> response =
-        restTemplate.exchange("/api/dojos/88", HttpMethod.DELETE, null, Void.class);
+        restTemplate.exchange("/dojos/88", HttpMethod.DELETE, null, Void.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
   }
 

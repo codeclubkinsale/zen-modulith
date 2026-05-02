@@ -1,4 +1,4 @@
-package com.coderdojo.zen.dojo;
+package com.coderdojo.zen.award;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doNothing;
@@ -31,9 +31,9 @@ import org.springframework.test.web.servlet.ResultActions;
 /**
  * Javadoc.
  */
-@WebMvcTest(DojoController.class)
+@WebMvcTest(AwardController.class)
 @AutoConfigureMockMvc
-class DojoControllerTest {
+class AwardControllerTest {
 
   /**
    * Javadoc.
@@ -45,11 +45,11 @@ class DojoControllerTest {
    * Javadoc.
    */
   @MockitoBean
-  DojoRepository repository;
+  AwardRepository repository;
   /**
    * Javadoc.
    */
-  List<Dojo> dojos = new ArrayList<>();
+  List<Award> awards = new ArrayList<>();
   /**
    * Javadoc.
    */
@@ -60,7 +60,7 @@ class DojoControllerTest {
    * Sole constructor. (For invocation by subclass
    * constructors, typically implicit.)
    */
-  DojoControllerTest() { /* Default Constructor */
+  AwardControllerTest() { /* Default Constructor */
   }
 
   /**
@@ -68,9 +68,9 @@ class DojoControllerTest {
    */
   @BeforeEach
   void setUp() {
-    dojos = List.of(
-        new Dojo(1, "Test Name One", "Test Description One", "Test Image One", null),
-        new Dojo(2, "Test Name Two", "Test Description Two", "Test Image Two", null)
+    awards = List.of(
+        new Award(1, "Test Name One", "Test Description One", "Test Image One", null),
+        new Award(2, "Test Name Two", "Test Description Two", "Test Image Two", null)
     );
   }
 
@@ -80,7 +80,7 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldFindAllDojos() throws Exception {
+  void shouldFindAllAwards() throws Exception {
     String jsonResponse = """
         [
             {
@@ -100,9 +100,9 @@ class DojoControllerTest {
         ]
         """;
 
-    when(repository.findAll()).thenReturn(dojos);
+    when(repository.findAll()).thenReturn(awards);
 
-    ResultActions resultActions = mockMvc.perform(get("/dojos"))
+    ResultActions resultActions = mockMvc.perform(get("/awards"))
         .andExpect(status().isOk())
         .andExpect(content().json(jsonResponse));
 
@@ -117,19 +117,19 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldFindDojoWhenGivenValidId() throws Exception {
-    Dojo dojo = new Dojo(1, "Test Title", "Test Body", "Test Body", null);
-    when(repository.findById(1)).thenReturn(Optional.of(dojo));
+  void shouldFindAwardWhenGivenValidId() throws Exception {
+    Award award = new Award(1, "Test Title", "Test Body", "Test Body", null);
+    when(repository.findById(1)).thenReturn(Optional.of(award));
 
 
-    mockMvc.perform(get("/dojos/1"))
+    mockMvc.perform(get("/awards/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name",
-            is(dojo.name())))
+            is(award.name())))
         .andExpect(jsonPath("$.description",
-            is(dojo.description())))
+            is(award.description())))
         .andExpect(jsonPath("$.image",
-            is(dojo.image())));
+            is(award.image())));
   }
 
   /**
@@ -138,20 +138,20 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldCreateNewDojoWhenGivenValidId() throws Exception {
-    Dojo dojo = new Dojo(1, "Test Title", "Test Body", "Test Body", null);
-    when(repository.save(dojo)).thenReturn(dojo);
+  void shouldCreateNewAwardWhenGivenValidId() throws Exception {
+    Award award = new Award(1, "Test Title", "Test Body", "Test Body", null);
+    when(repository.save(award)).thenReturn(award);
 
-    mockMvc.perform(post("/dojos")
+    mockMvc.perform(post("/awards")
             .contentType("application/json")
-            .content(objectMapper.writeValueAsString(dojo)))
+            .content(objectMapper.writeValueAsString(award)))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.name",
-            is(dojo.name())))
+            is(award.name())))
         .andExpect(jsonPath("$.description",
-            is(dojo.description())))
+            is(award.description())))
         .andExpect(jsonPath("$.image",
-            is(dojo.image())));
+            is(award.image())));
   }
 
   /**
@@ -160,13 +160,13 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldUpdateDojoWhenGivenValidDojo() throws Exception {
-    Dojo updated = new Dojo(1, "Test Title", "Test Body", "Test Body", null);
-    when(repository.findById(1)).thenReturn(Optional.of(dojos.getFirst()));
+  void shouldUpdateAwardWhenGivenValidAward() throws Exception {
+    Award updated = new Award(1, "Test Title", "Test Body", "Test Body", null);
+    when(repository.findById(1)).thenReturn(Optional.of(awards.getFirst()));
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/dojos/1")
+    mockMvc.perform(put("/awards/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isOk());
@@ -178,12 +178,12 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidDojoId() throws Exception {
-    Dojo updated = new Dojo(1, "Test Title", "Test Body", "Test Body", null);
+  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidAwardId() throws Exception {
+    Award updated = new Award(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/dojos/999")
+    mockMvc.perform(put("/awards/999")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isNotFound());
@@ -195,10 +195,10 @@ class DojoControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldDeleteDojoWhenGivenValidId() throws Exception {
+  void shouldDeleteAwardWhenGivenValidId() throws Exception {
     doNothing().when(repository).deleteById(1);
 
-    mockMvc.perform(delete("/dojos/1"))
+    mockMvc.perform(delete("/awards/1"))
         .andExpect(status().isNoContent());
 
     verify(repository, times(1)).deleteById(1);

@@ -1,20 +1,5 @@
 package com.coderdojo.zen.belt;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -27,6 +12,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 /**
  * Javadoc.
@@ -46,12 +46,10 @@ class BeltControllerTest {
    */
   @MockitoBean
   BeltRepository repository;
-
   /**
    * Javadoc.
    */
   List<Belt> belts = new ArrayList<>();
-
   /**
    * Javadoc.
    */
@@ -60,7 +58,7 @@ class BeltControllerTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   BeltControllerTest() { /* Default Constructor */
   }
@@ -104,7 +102,7 @@ class BeltControllerTest {
 
     when(repository.findAll()).thenReturn(belts);
 
-    ResultActions resultActions = mockMvc.perform(get("/api/belts"))
+    ResultActions resultActions = mockMvc.perform(get("/belts"))
         .andExpect(status().isOk())
         .andExpect(content().json(jsonResponse));
 
@@ -124,7 +122,7 @@ class BeltControllerTest {
     when(repository.findById(1)).thenReturn(Optional.of(belt));
 
 
-    mockMvc.perform(get("/api/belts/1"))
+    mockMvc.perform(get("/belts/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name",
             is(belt.name())))
@@ -140,11 +138,11 @@ class BeltControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldCreateNewBeltWhenGivenValidID() throws Exception {
+  void shouldCreateNewBeltWhenGivenValidId() throws Exception {
     Belt belt = new Belt(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(belt)).thenReturn(belt);
 
-    mockMvc.perform(post("/api/belts")
+    mockMvc.perform(post("/belts")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(belt)))
         .andExpect(status().isCreated())
@@ -168,7 +166,7 @@ class BeltControllerTest {
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/belts/1")
+    mockMvc.perform(put("/belts/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isOk());
@@ -180,12 +178,12 @@ class BeltControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidBeltID() throws Exception {
+  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidBeltId() throws Exception {
     Belt updated = new Belt(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/belts/999")
+    mockMvc.perform(put("/belts/999")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isNotFound());
@@ -197,10 +195,10 @@ class BeltControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldDeleteBeltWhenGivenValidID() throws Exception {
+  void shouldDeleteBeltWhenGivenValidId() throws Exception {
     doNothing().when(repository).deleteById(1);
 
-    mockMvc.perform(delete("/api/belts/1"))
+    mockMvc.perform(delete("/belts/1"))
         .andExpect(status().isNoContent());
 
     verify(repository, times(1)).deleteById(1);

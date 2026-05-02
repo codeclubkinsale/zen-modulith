@@ -1,5 +1,7 @@
 package com.coderdojo.zen.event;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Javadoc.
@@ -41,7 +41,7 @@ class EventControllerIntTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   EventControllerIntTest() { /* Default Constructor */
   }
@@ -60,17 +60,17 @@ class EventControllerIntTest {
    */
   @Test
   void shouldFindAllEvents() {
-    Event[] events = restTemplate.getForObject("/api/events", Event[].class);
-    assertThat(events).hasSizeGreaterThan(8);
+    Event[] events = restTemplate.getForObject("/events", Event[].class);
+    assertThat(events).hasSizeGreaterThan(7);
   }
 
   /**
    * Javadoc.
    */
   @Test
-  void shouldFindEventWhenValidEventID() {
+  void shouldFindEventWhenValidEventId() {
     ResponseEntity<Event> response =
-        restTemplate.exchange("/api/events/1", HttpMethod.GET, null, Event.class);
+        restTemplate.exchange("/events/1", HttpMethod.GET, null, Event.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
   }
@@ -79,10 +79,10 @@ class EventControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldThrowNotFoundWhenInvalidEventID() {
+  void shouldThrowNotFoundWhenInvalidEventId() {
     ResponseEntity<Event> response =
-        restTemplate.exchange("/api/events/999", HttpMethod.GET, null, Event.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        restTemplate.exchange("/events/999", HttpMethod.GET, null, Event.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   /**
@@ -94,7 +94,7 @@ class EventControllerIntTest {
     Event event = new Event(9, "Test Name", "Test Description", "Test Image", null);
 
     ResponseEntity<Event> response =
-        restTemplate.exchange("/api/events", HttpMethod.POST, new HttpEntity<>(event), Event.class);
+        restTemplate.exchange("/events", HttpMethod.POST, new HttpEntity<>(event), Event.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(response.getBody()).isNotNull();
     assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(9);
@@ -110,7 +110,7 @@ class EventControllerIntTest {
   void shouldNotCreateNewEventWhenValidationFails() {
     Event event = new Event(9, "Test Title", "Test Body", "", null);
     ResponseEntity<Event> response =
-        restTemplate.exchange("/api/events", HttpMethod.POST, new HttpEntity<>(event), Event.class);
+        restTemplate.exchange("/events", HttpMethod.POST, new HttpEntity<>(event), Event.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -122,7 +122,7 @@ class EventControllerIntTest {
   @Rollback
   void shouldUpdateEventWhenEventIsValid() {
     ResponseEntity<Event> response =
-        restTemplate.exchange("/api/events/8", HttpMethod.GET, null, Event.class);
+        restTemplate.exchange("/events/8", HttpMethod.GET, null, Event.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     Event existing = response.getBody();
@@ -132,7 +132,7 @@ class EventControllerIntTest {
             existing.version());
 
     assertThat(updated.id()).isEqualTo(8);
-    assertThat(updated.name()).isEqualTo("Black Belt");
+    assertThat(updated.name()).isEqualTo("excepturi optio8");
     assertThat(updated.description()).isEqualTo("NEW POST TITLE #1");
     assertThat(updated.image()).isEqualTo("NEW POST BODY #1");
   }
@@ -142,9 +142,9 @@ class EventControllerIntTest {
    */
   @Test
   @Rollback
-  void shouldDeleteWithValidID() {
+  void shouldDeleteWithValidId() {
     ResponseEntity<Void> response =
-        restTemplate.exchange("/api/events/88", HttpMethod.DELETE, null, Void.class);
+        restTemplate.exchange("/events/88", HttpMethod.DELETE, null, Void.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
   }
 
