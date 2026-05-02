@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "Event", description = "the Event API")
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/events")
 class EventController {
 
   /**
@@ -46,8 +46,8 @@ class EventController {
    *
    * @return Example
    */
-  @Operation(summary = "Create user", description = "This can only be done by the logged in user.",
-      tags = {"user"})
+  @Operation(summary = "Create user",
+      description = "This can only be done by the logged in user.", tags = {"user"})
   @GetMapping("")
   List<Event> findAll() {
     return repository.findAll();
@@ -99,7 +99,7 @@ class EventController {
 
       return repository.save(updatedEvent);
     } else {
-      throw new NotFoundException("Event Not Found");
+      throw new NotFoundException("Event not found");
     }
   }
 

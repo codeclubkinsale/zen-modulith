@@ -1,6 +1,7 @@
 package com.coderdojo.zen.exception;
 
 import java.net.URI;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -46,7 +47,8 @@ public class GlobalControllerExceptionHandler {
    * @param exception Example
    * @return Example
    */
-  @ExceptionHandler({NoHandlerFoundException.class, MethodArgumentTypeMismatchException.class})
+  @ExceptionHandler({NoHandlerFoundException.class, MethodArgumentTypeMismatchException.class,
+      NoSuchElementException.class})
   public ErrorResponse handleNotFoundException(Exception exception) {
     return getErrorResponse(
         "Not Found",

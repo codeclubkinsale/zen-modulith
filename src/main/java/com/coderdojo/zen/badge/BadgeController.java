@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "Badge", description = "the Badge API")
 @RestController
-@RequestMapping("/api/badges")
+@RequestMapping("/badges")
 class BadgeController {
 
   /**
@@ -46,8 +46,8 @@ class BadgeController {
    *
    * @return Example
    */
-  @Operation(summary = "Create user", description = "This can only be done by the logged in user.",
-      tags = {"user"})
+  @Operation(summary = "Create user",
+      description = "This can only be done by the logged in user.", tags = {"user"})
   @GetMapping("")
   List<Badge> findAll() {
     return repository.findAll();
@@ -99,7 +99,7 @@ class BadgeController {
 
       return repository.save(updatedBadge);
     } else {
-      throw new NotFoundException("Badge Not Found");
+      throw new NotFoundException("Badge not found");
     }
   }
 

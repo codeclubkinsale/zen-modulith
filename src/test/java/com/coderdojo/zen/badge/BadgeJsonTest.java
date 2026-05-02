@@ -1,14 +1,14 @@
 package com.coderdojo.zen.badge;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
- * Javadoc
+ * Javadoc.
  */
 @JsonTest
 class BadgeJsonTest {
@@ -20,35 +20,36 @@ class BadgeJsonTest {
    * Sole constructor. (For invocation by subclass
    * constructors, typically implicit.)
    */
-  BadgeJsonTest() { /* Default Constructor */ }
+  BadgeJsonTest() { /* Default Constructor */
+  }
 
   /**
-   * Javadoc
+   * Javadoc.
    *
    * @throws Exception Example
    */
   @Test
   void shouldSerializeBadge() throws Exception {
-    Badge badge = new Badge(1, "Test Title", "Test Body", "Test Body", null);
+    Badge badge = new Badge(1, "Name", "Description", "Image", null);
     String expected = """
-                {"id":1,"name":"Test Title","description":"Test Body","image":"Test Body","version":null}
+        {"id":1,"name":"Name","description":"Description","image":"Image","version":null}
         """;
     assertThat(jacksonTester.write(badge)).isEqualToJson(expected);
   }
 
   /**
-   * Javadoc
+   * Javadoc.
    *
    * @throws Exception Example
    */
   @Test
   void shouldDeserializeBadge() throws Exception {
-    Badge badge = new Badge(1, "Test Name", "Test Description", "Test Image", null);
+    Badge badge = new Badge(1, "Name", "Description", "Image", null);
     String content = """
-                {"id":1,"name":"Test Name","description":"Test Description","image":"Test Image","version":null}
+        {"id":1,"name":"Name","description":"Description","image":"Image","version":null}
         """;
 
-    assertThat(jacksonTester.parseObject(content).id()).isEqualTo(1);
+    assertThat(jacksonTester.parseObject(content).id()).isEqualTo(badge.id());
     assertThat(jacksonTester.parseObject(content).name()).isEqualTo(badge.name());
     assertThat(jacksonTester.parseObject(content).description()).isEqualTo(badge.description());
     assertThat(jacksonTester.parseObject(content).image()).isEqualTo(badge.image());

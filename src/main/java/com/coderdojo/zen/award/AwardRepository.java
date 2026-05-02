@@ -1,4 +1,4 @@
-package com.coderdojo.zen.badge;
+package com.coderdojo.zen.award;
 
 import java.util.Optional;
 import org.springframework.data.repository.ListCrudRepository;
@@ -6,7 +6,7 @@ import org.springframework.data.repository.ListCrudRepository;
 /**
  * Javadoc.
  */
-interface BadgeRepository extends ListCrudRepository<Badge, Integer> {
+interface AwardRepository extends ListCrudRepository<Award, Integer> {
 
   /**
    * Javadoc.
@@ -14,6 +14,6 @@ interface BadgeRepository extends ListCrudRepository<Badge, Integer> {
    * @param name Example
    * @return Example
    */
-  Optional<Badge> findByName(String name);
+  Optional<Award> findByName(String name);
 
 }

@@ -1,4 +1,4 @@
-package com.coderdojo.zen.dojo;
+package com.coderdojo.zen.award;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +23,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class DojoRepositoryTest {
+class AwardRepositoryTest {
 
   /**
    * Javadoc.
@@ -36,7 +36,7 @@ class DojoRepositoryTest {
    * Javadoc.
    */
   @Autowired
-  DojoRepository dojoRepository;
+  AwardRepository awardRepository;
 
   /**
    * Javadoc.
@@ -48,7 +48,7 @@ class DojoRepositoryTest {
    * Sole constructor. (For invocation by subclass
    * constructors, typically implicit.)
    */
-  DojoRepositoryTest() { /* Default Constructor */
+  AwardRepositoryTest() { /* Default Constructor */
   }
 
   /**
@@ -56,8 +56,8 @@ class DojoRepositoryTest {
    */
   @BeforeEach
   void setUp() {
-    List<Dojo> dojos = List.of(new Dojo(9, "Test Title", "Test Body", "Test Body", null));
-    dojoRepository.saveAll(dojos);
+    List<Award> awards = List.of(new Award(9, "Test Title", "Test Body", "Test Body", null));
+    awardRepository.saveAll(awards);
   }
 
   /**
@@ -73,18 +73,18 @@ class DojoRepositoryTest {
    * Javadoc.
    */
   @Test
-  void shouldReturnDojoByName() {
-    Dojo dojo = dojoRepository.findByName("Test Title").orElseThrow();
-    assertEquals("Test Title", dojo.name(), "Dojo title should be 'Hello, World!'");
+  void shouldReturnAwardByName() {
+    Award award = awardRepository.findByName("Test Title").orElseThrow();
+    assertEquals("Test Title", award.name(), "Award title should be 'Hello, World!'");
   }
 
   /**
    * Javadoc.
    */
   @Test
-  void shouldNotReturnDojoWhenTitleIsNotFound() {
-    Optional<Dojo> dojo = dojoRepository.findByName("Hello, Wrong Title!");
-    assertFalse(dojo.isPresent(), "Dojo should not be present");
+  void shouldNotReturnAwardWhenTitleIsNotFound() {
+    Optional<Award> award = awardRepository.findByName("Hello, Wrong Title!");
+    assertFalse(award.isPresent(), "Award should not be present");
   }
 
 }

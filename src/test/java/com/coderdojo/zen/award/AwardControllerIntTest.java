@@ -1,4 +1,4 @@
-package com.coderdojo.zen.badge;
+package com.coderdojo.zen.award;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,7 +24,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
-class BadgeControllerIntTest {
+class AwardControllerIntTest {
 
   /**
    * Javadoc.
@@ -43,7 +43,7 @@ class BadgeControllerIntTest {
    * Sole constructor. (For invocation by subclass
    * constructors, typically implicit.)
    */
-  BadgeControllerIntTest() { /* Default Constructor */
+  AwardControllerIntTest() { /* Default Constructor */
   }
 
   /**
@@ -59,18 +59,18 @@ class BadgeControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldFindAllBadges() {
-    Badge[] badges = restTemplate.getForObject("/badges", Badge[].class);
-    assertThat(badges).hasSizeGreaterThan(7);
+  void shouldFindAllAwards() {
+    Award[] awards = restTemplate.getForObject("/awards", Award[].class);
+    assertThat(awards).hasSizeGreaterThan(7);
   }
 
   /**
    * Javadoc.
    */
   @Test
-  void shouldFindBadgeWhenValidBadgeId() {
-    ResponseEntity<Badge> response =
-        restTemplate.exchange("/badges/1", HttpMethod.GET, null, Badge.class);
+  void shouldFindAwardWhenValidAwardId() {
+    ResponseEntity<Award> response =
+        restTemplate.exchange("/awards/1", HttpMethod.GET, null, Award.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
   }
@@ -79,9 +79,9 @@ class BadgeControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldThrowNotFoundWhenInvalidBadgeId() {
-    ResponseEntity<Badge> response =
-        restTemplate.exchange("/badges/999", HttpMethod.GET, null, Badge.class);
+  void shouldThrowNotFoundWhenInvalidAwardId() {
+    ResponseEntity<Award> response =
+        restTemplate.exchange("/awards/999", HttpMethod.GET, null, Award.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
@@ -90,11 +90,11 @@ class BadgeControllerIntTest {
    */
   @Test
   @Rollback
-  void shouldCreateNewBadgeWhenBadgeIsValid() {
-    Badge badge = new Badge(9, "Test Name", "Test Description", "Test Image", null);
+  void shouldCreateNewAwardWhenAwardIsValid() {
+    Award award = new Award(9, "Test Name", "Test Description", "Test Image", null);
 
-    ResponseEntity<Badge> response =
-        restTemplate.exchange("/badges", HttpMethod.POST, new HttpEntity<>(badge), Badge.class);
+    ResponseEntity<Award> response =
+        restTemplate.exchange("/awards", HttpMethod.POST, new HttpEntity<>(award), Award.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(response.getBody()).isNotNull();
     assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(9);
@@ -107,10 +107,10 @@ class BadgeControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldNotCreateNewBadgeWhenValidationFails() {
-    Badge badge = new Badge(9, "Test Title", "Test Body", "", null);
-    ResponseEntity<Badge> response =
-        restTemplate.exchange("/badges", HttpMethod.POST, new HttpEntity<>(badge), Badge.class);
+  void shouldNotCreateNewAwardWhenValidationFails() {
+    Award award = new Award(9, "Test Title", "Test Body", "", null);
+    ResponseEntity<Award> response =
+        restTemplate.exchange("/awards", HttpMethod.POST, new HttpEntity<>(award), Award.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -120,15 +120,15 @@ class BadgeControllerIntTest {
    */
   @Test
   @Rollback
-  void shouldUpdateBadgeWhenBadgeIsValid() {
-    ResponseEntity<Badge> response =
-        restTemplate.exchange("/badges/8", HttpMethod.GET, null, Badge.class);
+  void shouldUpdateAwardWhenAwardIsValid() {
+    ResponseEntity<Award> response =
+        restTemplate.exchange("/awards/8", HttpMethod.GET, null, Award.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    Badge existing = response.getBody();
+    Award existing = response.getBody();
     assertThat(existing).isNotNull();
-    Badge updated =
-        new Badge(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
+    Award updated =
+        new Award(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
             existing.version());
 
     assertThat(updated.id()).isEqualTo(8);
@@ -144,7 +144,7 @@ class BadgeControllerIntTest {
   @Rollback
   void shouldDeleteWithValidId() {
     ResponseEntity<Void> response =
-        restTemplate.exchange("/badges/88", HttpMethod.DELETE, null, Void.class);
+        restTemplate.exchange("/awards/88", HttpMethod.DELETE, null, Void.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
   }
 

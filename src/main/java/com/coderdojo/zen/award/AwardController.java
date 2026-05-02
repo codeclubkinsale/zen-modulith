@@ -1,4 +1,4 @@
-package com.coderdojo.zen.dojo;
+package com.coderdojo.zen.award;
 
 import com.coderdojo.zen.exception.NotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,22 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Javadoc.
  */
-@Tag(name = "Dojo", description = "the Dojo API")
+@Tag(name = "Award", description = "the Award API")
 @RestController
-@RequestMapping("/dojos")
-class DojoController {
+@RequestMapping("/awards")
+class AwardController {
 
   /**
    * Javadoc.
    */
-  private final DojoRepository repository;
+  private final AwardRepository repository;
 
   /**
    * Javadoc.
    *
    * @param repository Example
    */
-  DojoController(DojoRepository repository) {
+  AwardController(AwardRepository repository) {
     this.repository = repository;
   }
 
@@ -49,7 +49,7 @@ class DojoController {
   @Operation(summary = "Create user",
       description = "This can only be done by the logged in user.", tags = {"user"})
   @GetMapping("")
-  List<Dojo> findAll() {
+  List<Award> findAll() {
     return repository.findAll();
   }
 
@@ -64,42 +64,42 @@ class DojoController {
       @ApiResponse(responseCode = "404", description = "tweet not found")
   })
   @GetMapping("/{id}")
-  Optional<Dojo> findById(@PathVariable Integer id) {
+  Optional<Award> findById(@PathVariable Integer id) {
     return Optional.of(repository.findById(id).orElseThrow());
   }
 
   /**
    * Javadoc.
    *
-   * @param dojo Example
+   * @param award Example
    * @return Example
    */
   @PostMapping("")
   @ResponseStatus(HttpStatus.CREATED)
-  Dojo save(@RequestBody @Valid Dojo dojo) {
-    return repository.save(dojo);
+  Award save(@RequestBody @Valid Award award) {
+    return repository.save(award);
   }
 
   /**
    * Javadoc.
    *
-   * @param id   Example
-   * @param dojo Example
+   * @param id    Example
+   * @param award Example
    * @return Example
    */
   @PutMapping("/{id}")
-  Dojo update(@PathVariable Integer id, @RequestBody Dojo dojo) {
-    Optional<Dojo> existing = repository.findById(id);
+  Award update(@PathVariable Integer id, @RequestBody Award award) {
+    Optional<Award> existing = repository.findById(id);
     if (existing.isPresent()) {
-      Dojo updatedDojo = new Dojo(existing.get().id(),
+      Award updatedAward = new Award(existing.get().id(),
           existing.get().name(),
-          dojo.description(),
-          dojo.image(),
+          award.description(),
+          award.image(),
           existing.get().version());
 
-      return repository.save(updatedDojo);
+      return repository.save(updatedAward);
     } else {
-      throw new NotFoundException("Dojo not found");
+      throw new NotFoundException("Award Not Found");
     }
   }
 

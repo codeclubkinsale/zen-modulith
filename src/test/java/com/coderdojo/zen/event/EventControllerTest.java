@@ -1,20 +1,5 @@
 package com.coderdojo.zen.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
@@ -27,6 +12,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 /**
  * Javadoc.
@@ -46,12 +46,10 @@ class EventControllerTest {
    */
   @MockitoBean
   EventRepository repository;
-
   /**
    * Javadoc.
    */
   List<Event> events = new ArrayList<>();
-
   /**
    * Javadoc.
    */
@@ -60,7 +58,7 @@ class EventControllerTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   EventControllerTest() { /* Default Constructor */
   }
@@ -104,7 +102,7 @@ class EventControllerTest {
 
     when(repository.findAll()).thenReturn(events);
 
-    ResultActions resultActions = mockMvc.perform(get("/api/events"))
+    ResultActions resultActions = mockMvc.perform(get("/events"))
         .andExpect(status().isOk())
         .andExpect(content().json(jsonResponse));
 
@@ -124,7 +122,7 @@ class EventControllerTest {
     when(repository.findById(1)).thenReturn(Optional.of(event));
 
 
-    mockMvc.perform(get("/api/events/1"))
+    mockMvc.perform(get("/events/1"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name",
             is(event.name())))
@@ -140,11 +138,11 @@ class EventControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldCreateNewEventWhenGivenValidID() throws Exception {
+  void shouldCreateNewEventWhenGivenValidId() throws Exception {
     Event event = new Event(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(event)).thenReturn(event);
 
-    mockMvc.perform(post("/api/events")
+    mockMvc.perform(post("/events")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(event)))
         .andExpect(status().isCreated())
@@ -164,11 +162,11 @@ class EventControllerTest {
   @Test
   void shouldUpdateEventWhenGivenValidEvent() throws Exception {
     Event updated = new Event(1, "Test Title", "Test Body", "Test Body", null);
-    when(repository.findById(1)).thenReturn(Optional.of(events.get(0)));
+    when(repository.findById(1)).thenReturn(Optional.of(events.getFirst()));
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/events/1")
+    mockMvc.perform(put("/events/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isOk());
@@ -180,12 +178,12 @@ class EventControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidEventID() throws Exception {
+  void shouldNotUpdateAndThrowNotFoundWhenGivenAnInvalidEventId() throws Exception {
     Event updated = new Event(1, "Test Title", "Test Body", "Test Body", null);
     when(repository.save(updated)).thenReturn(updated);
 
 
-    mockMvc.perform(put("/api/events/999")
+    mockMvc.perform(put("/events/999")
             .contentType("application/json")
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isNotFound());
@@ -197,10 +195,10 @@ class EventControllerTest {
    * @throws Exception Example
    */
   @Test
-  void shouldDeleteEventWhenGivenValidID() throws Exception {
+  void shouldDeleteEventWhenGivenValidId() throws Exception {
     doNothing().when(repository).deleteById(1);
 
-    mockMvc.perform(delete("/api/events/1"))
+    mockMvc.perform(delete("/events/1"))
         .andExpect(status().isNoContent());
 
     verify(repository, times(1)).deleteById(1);

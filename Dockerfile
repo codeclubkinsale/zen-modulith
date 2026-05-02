@@ -7,4 +7,4 @@ WORKDIR /home/nobody
 COPY ${JAR_FILE} app.jar
 
 USER 65534
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]

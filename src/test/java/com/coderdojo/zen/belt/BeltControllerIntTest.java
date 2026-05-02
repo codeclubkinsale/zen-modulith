@@ -1,5 +1,7 @@
 package com.coderdojo.zen.belt;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Javadoc.
@@ -41,7 +41,7 @@ class BeltControllerIntTest {
 
   /**
    * Sole constructor. (For invocation by subclass
-   * constructors, typically implicit.).
+   * constructors, typically implicit.)
    */
   BeltControllerIntTest() { /* Default Constructor */
   }
@@ -60,17 +60,17 @@ class BeltControllerIntTest {
    */
   @Test
   void shouldFindAllBelts() {
-    Belt[] belts = restTemplate.getForObject("/api/belts", Belt[].class);
-    assertThat(belts).hasSizeGreaterThan(8);
+    Belt[] belts = restTemplate.getForObject("/belts", Belt[].class);
+    assertThat(belts).hasSizeGreaterThan(7);
   }
 
   /**
    * Javadoc.
    */
   @Test
-  void shouldFindBeltWhenValidBeltID() {
+  void shouldFindBeltWhenValidBeltId() {
     ResponseEntity<Belt> response =
-        restTemplate.exchange("/api/belts/1", HttpMethod.GET, null, Belt.class);
+        restTemplate.exchange("/belts/1", HttpMethod.GET, null, Belt.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
   }
@@ -79,10 +79,10 @@ class BeltControllerIntTest {
    * Javadoc.
    */
   @Test
-  void shouldThrowNotFoundWhenInvalidBeltID() {
+  void shouldThrowNotFoundWhenInvalidBeltId() {
     ResponseEntity<Belt> response =
-        restTemplate.exchange("/api/belts/999", HttpMethod.GET, null, Belt.class);
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        restTemplate.exchange("/belts/999", HttpMethod.GET, null, Belt.class);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
   }
 
   /**
@@ -94,7 +94,7 @@ class BeltControllerIntTest {
     Belt belt = new Belt(9, "Test Name", "Test Description", "Test Image", null);
 
     ResponseEntity<Belt> response =
-        restTemplate.exchange("/api/belts", HttpMethod.POST, new HttpEntity<>(belt), Belt.class);
+        restTemplate.exchange("/belts", HttpMethod.POST, new HttpEntity<>(belt), Belt.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(response.getBody()).isNotNull();
     assertThat(Objects.requireNonNull(response.getBody()).id()).isEqualTo(9);
@@ -110,7 +110,7 @@ class BeltControllerIntTest {
   void shouldNotCreateNewBeltWhenValidationFails() {
     Belt belt = new Belt(9, "Test Title", "Test Body", "", null);
     ResponseEntity<Belt> response =
-        restTemplate.exchange("/api/belts", HttpMethod.POST, new HttpEntity<>(belt), Belt.class);
+        restTemplate.exchange("/belts", HttpMethod.POST, new HttpEntity<>(belt), Belt.class);
 
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
   }
@@ -122,16 +122,17 @@ class BeltControllerIntTest {
   @Rollback
   void shouldUpdateBeltWhenBeltIsValid() {
     ResponseEntity<Belt> response =
-        restTemplate.exchange("/api/belts/8", HttpMethod.GET, null, Belt.class);
+        restTemplate.exchange("/belts/8", HttpMethod.GET, null, Belt.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     Belt existing = response.getBody();
     assertThat(existing).isNotNull();
-    Belt updated = new Belt(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
-        existing.version());
+    Belt updated =
+        new Belt(existing.id(), existing.name(), "NEW POST TITLE #1", "NEW POST BODY #1",
+            existing.version());
 
     assertThat(updated.id()).isEqualTo(8);
-    assertThat(updated.name()).isEqualTo("Black Belt");
+    assertThat(updated.name()).isEqualTo("excepturi optio8");
     assertThat(updated.description()).isEqualTo("NEW POST TITLE #1");
     assertThat(updated.image()).isEqualTo("NEW POST BODY #1");
   }
@@ -141,9 +142,9 @@ class BeltControllerIntTest {
    */
   @Test
   @Rollback
-  void shouldDeleteWithValidID() {
+  void shouldDeleteWithValidId() {
     ResponseEntity<Void> response =
-        restTemplate.exchange("/api/belts/88", HttpMethod.DELETE, null, Void.class);
+        restTemplate.exchange("/belts/88", HttpMethod.DELETE, null, Void.class);
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
   }
 

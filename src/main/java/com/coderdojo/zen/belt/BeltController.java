@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "Belt", description = "the Belt API")
 @RestController
-@RequestMapping("/api/belts")
+@RequestMapping("/belts")
 class BeltController {
 
   /**
@@ -46,8 +46,8 @@ class BeltController {
    *
    * @return Example
    */
-  @Operation(summary = "Create user", description = "This can only be done by the logged in user.",
-      tags = {"user"})
+  @Operation(summary = "Create user",
+      description = "This can only be done by the logged in user.", tags = {"user"})
   @GetMapping("")
   List<Belt> findAll() {
     return repository.findAll();
@@ -99,7 +99,7 @@ class BeltController {
 
       return repository.save(updatedBelt);
     } else {
-      throw new NotFoundException("Belt Not Found");
+      throw new NotFoundException("Belt not found");
     }
   }
 
